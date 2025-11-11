@@ -1,0 +1,67 @@
+services:
+  server:
+    image: ourlink/mintsolo:v0.0.1
+    restart: unless-stopped
+    ports:
+      - "3068:3068/tcp"
+    volumes:
+      - "${APP_DATA_DIR}/data/database:/mintsolo/DB"
+    environment:
+      - NODE_ENV=production
+      - BITCOIN_RPC_URL=http://${APP_BITCOIN_NODE_IP}
+      - BITCOIN_RPC_USER=${APP_BITCOIN_RPC_USER}
+      - BITCOIN_RPC_PASSWORD=${APP_BITCOIN_RPC_PASS}
+      - BITCOIN_RPC_PORT=${APP_BITCOIN_RPC_PORT}
+      - BITCOIN_RPC_TIMEOUT=10000
+      - STRATUM_PORT=3067
+      - API_PORT=3068
+      - NETWORK=mainnet
+      - API_SECURE=false
+      - ENABLE_SOLO=true
+      - ENABLE_PROXY=false
+      - POOL_IDENTIFIER="MintSolo Umbrel"
+
+  zrok-init:
+    image: busybox
+    command: chown -Rc 2171:2171 /mnt/
+    user: root
+    volumes:
+      - zrok_env:/mnt
+
+  zrok-enable:
+    image: ${ZROK_CONTAINER_IMAGE:-docker.io/openziti/zrok}
+    depends_on:
+      zrok-init:
+        condition: service_completed_successfully
+    entrypoint: zrok-enable.bash
+    volumes:
+      - zrok_env:/mnt
+    environment:
+      HOME: /mnt
+      ZROK_ENABLE_TOKEN: "e794E6PkiamK"
+      ZROK_API_ENDPOINT: "https://zrok.shared.djjunk.com"
+      ZROK_ENVIRONMENT_NAME: null
+
+  zrok-share:
+    image: ${ZROK_CONTAINER_IMAGE:-docker.io/openziti/zrok}
+    restart: unless-stopped
+    entrypoint: zrok-share.bash
+    depends_on:
+      zrok-enable:
+        condition: service_completed_successfully
+    volumes:
+      - zrok_env:/mnt
+    environment:
+      HOME: /mnt
+      ZROK_BACKEND_MODE: "proxy"
+      ZROK_TARGET: "http://server:3068"
+      ZROK_INSECURE: null
+      PFXLOG_NO_JSON: "true"
+
+  zrok-test:
+    image: ${ZROK_CONTAINER_IMAGE:-docker.io/openziti/zrok}
+    command: test endpoint --address 0.0.0.0 # 9090
+
+volumes:
+  zrok_env: null
+networks: {}

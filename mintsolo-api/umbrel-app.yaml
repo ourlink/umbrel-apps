@@ -1,0 +1,50 @@
+manifestVersion: 1
+id: MintSolo
+category: bitcoin
+name: MintSolo-API
+version: "v0.0.1"
+tagline: MintSolo - Bitcoin Solo Mining Platform API
+description: >-
+  In short, MintSolo is a Bitcoin solo mining pool. However, we prefer not to call it a mining pool because it implies that miners are pooling their mining 
+  resources together in an attempt to find a Bitcoin Block. Instead, we describe MintSolo as a mining platform explicitly designed for Bitcoin Solo Miners.
+  
+  
+  The MintSolo platform runs several Bitcoin Nodes, a custom Bitcoin Mining Stratum environment, and a Bitcoin Miner Statistics website. 
+  
+  
+  Our platform has been fine-tuned to provide solo miners with a network that enhances their probability of finding a Bitcoin Block and thus hitting the Lottery!
+  
+    
+  On umbrelOS, the MintSolo-API automatically configures a connection to your bitcoin instance as well as providing you with the state of the art solo mining platform.
+  
+    
+  To begin mining, follow these simple processes;
+  
+  
+  #1 - Point your mining hardware to your MintSolo-API instance using the stratum details provided in the MintSolo-API app.
+  #2 - Create an account on the MintSolo stats page (https://stats.mintsolo.com).
+  #3 - Within the settings enter your private, secure API URL to track the performance of your Umbrel Hosted Miners.
+
+  
+developer: MintSolo
+website: https://mintsolo.com
+dependencies:
+  - bitcoin
+repo: https://github.com/ourlink/mintsolo
+support: https://github.com/ourlink/mintsolo/issues
+port: 2019
+gallery:
+  - 1.jpg
+  - 2.jpg
+  - 3.jpg
+path: ""
+releaseNotes: >-
+  This is the initial release of our MintSolo-API for Umbrel Bitcoin Solo Mining.
+
+
+  In a future release we will include a widget which you can add to your Umbrel Home page.
+defaultPassword: ""
+submitter: ourlink
+submission: https://github.com/getumbrel/umbrel-apps/pull/xxxx
+repo: https://github.com/ourlink/mintsolo
+support: https://github.com/ourlink/mintsolo/issues
